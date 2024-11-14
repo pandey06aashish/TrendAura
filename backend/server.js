@@ -18,7 +18,11 @@ connectCloudinary();
 app.use(express.json())
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow both origins
+    origin: [
+        'http://localhost:5173', // Local
+        'http://localhost:5174', // Local alternative
+        'https://your-frontend-url.vercel.app' // Production
+    ],
     credentials: true
 }));
 
