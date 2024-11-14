@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import Title from '../components/Title';
 import { assets } from '../assets/assets';
+import CartTotal from '../components/cartTotal';
+
+
 const Cart = () => {
   const { products, currency, cartItems, updateCartItem, removeCartItem ,updateQuantity,navigate} = useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
