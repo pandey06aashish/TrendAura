@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      external: ['react-toastify'], // Externalize react-toastify if necessary
+      external: ['react-toastify'], // Externalize react-toastify if needed
     },
   },
 });
