@@ -4,17 +4,13 @@ import axios from 'axios';
 import { backendURL } from '../App';
 import { toast } from 'react-toastify';
 
-const Add = ({token}) => {
-  const [image1, setImage1] = useState(false);
-  const [image2, setImage2] = useState(false);
-  const [image3, setImage3] = useState(false);
-  const [image4, setImage4] = useState(false);
-
+const Add = ({ token }) => {
+  const [images, setImages] = useState([false, false, false, false]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('Men');
-   const [subCategory, setSubCategory] = useState('topwear');
+  const [subCategory, setSubCategory] = useState('topwear');
   const [bestseller, setBestSeller] = useState(false);
   const [sizes, setSizes] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,30 +27,30 @@ const Add = ({token}) => {
       formData.append('subCategory', subCategory);
       formData.append('bestseller', bestseller);
       formData.append('sizes', JSON.stringify(sizes));
-      image1 && formData.append('image1', image1);
-      image2 && formData.append('image2', image2);
-      image3 && formData.append('image3', image3);
-      image4 && formData.append('image4', image4);
+      images.forEach((img, idx) => img && formData.append(`image${idx + 1}`, img));
 
-      const response = await axios.post(`${backendURL}/api/product/add`, formData,{headers:{token}});
-      if(response.data.success){
-        toast.success(response.data.message)
+      const response = await axios.post(`${backendURL}/api/product/add`, formData, { headers: { token } });
+      if (response.data.success) {
+        toast.success(response.data.message);
         setName('');
         setDescription('');
-        setImage1(false);
-        setImage2(false);
-        setImage3(false);
-        setImage4(false);
-        setPrice('')
-      }else{
-        toast.error(response.data.message)
+        setImages([false, false, false, false]);
+        setPrice('');
+      } else {
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error('There was an error adding the product:', error);
-        toast.error(error.message)
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleImageChange = (idx, file) => {
+    const newImages = [...images];
+    newImages[idx] = file;
+    setImages(newImages);
   };
 
   return (
@@ -63,11 +59,15 @@ const Add = ({token}) => {
       <div>
         <p className='mb-2'>Upload Image</p>
         <div className='flex gap-2'>
-          {/* Render Image Upload Labels */}
-          {[image1, image2, image3, image4].map((img, idx) => (
+          {images.map((img, idx) => (
             <label key={idx} htmlFor={`image${idx + 1}`}>
               <img className='w-20' src={!img ? assets.upload_area : URL.createObjectURL(img)} alt='' />
-              <input onChange={(e) => eval(`setImage${idx + 1}(e.target.files[0])`)} type='file' id={`image${idx + 1}`} hidden />
+              <input
+                onChange={(e) => handleImageChange(idx, e.target.files[0])}
+                type='file'
+                id={`image${idx + 1}`}
+                hidden
+              />
             </label>
           ))}
         </div>
@@ -91,7 +91,6 @@ const Add = ({token}) => {
           onChange={(e) => setDescription(e.target.value)}
           value={description}
           className='w-full max-w-[500px] px-3 py-2'
-          type='text'
           placeholder='Write Content here'
           required
         />
@@ -149,7 +148,7 @@ const Add = ({token}) => {
       </div>
 
       {/* Submit Button */}
-      <button type='submit' className='w-28 py-3 mt-4 bg-black text-white'>
+      <button type='submit' className='w-28 py-3 mt-4 bg-black text-white' disabled={loading}>
         {loading ? 'Adding...' : 'ADD'}
       </button>
     </form>
