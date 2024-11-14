@@ -9,36 +9,37 @@ import cardRouter from './routes/cardRoute.js';
 import orderRoute from './routes/orderRoute.js';
 
 // App Config
-const app=express();
-const port =process.env.PORT || 4000;
+const app = express();
+const port = process.env.PORT || 4000;
 connectDB();
-connectCloudinary(); 
+connectCloudinary();
 
-// middlewares
-app.use(express.json())
+// Middleware
+app.use(express.json());
 
 app.use(cors({
     origin: [
         'http://localhost:5173', // Local
         'http://localhost:5174', // Local alternative
-        'https://your-frontend-url.vercel.app' // Production
+        'https://trend-aura-admin.vercel.app' // Production URL
     ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add OPTIONS to supported methods
     credentials: true
 }));
-app.options('*', cors()); // Allow CORS preflight for all routes
 
-// api Endpoints
+// Allow CORS preflight for all routes
+app.options('*', cors());
 
-app.use('/api/user',userRouter)
-app.use('/api/product',productRouter)
-app.use("/api/cart",cardRouter)
-app.use("/api/order",orderRoute)
+// API Endpoints
+app.use('/api/user', userRouter);
+app.use('/api/product', productRouter);
+app.use("/api/cart", cardRouter);
+app.use("/api/order", orderRoute);
 
+app.get('/', (req, res) => {
+    res.send("API Working");
+});
 
-app.get('/',(req,res)=>{
-    res.send("API Working")
-})
-
-app.listen(port,()=>{
-    console.log("Server Start on Port:"+port)
-})
+app.listen(port, () => {
+    console.log("Server started on Port:" + port);
+});
