@@ -25,6 +25,7 @@ app.use(cors({
     ],
     credentials: true
 }));
+app.options('*', cors()); // Allow CORS preflight for all routes
 
 // api Endpoints
 
