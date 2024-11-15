@@ -9,6 +9,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
+      external: [],
       output: {
         // Ensures better chunking for production builds
         manualChunks: undefined,
