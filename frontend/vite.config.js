@@ -8,8 +8,8 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      // Explicitly mark "react-router-dom" as external
-      external: ['react-router-dom'],
+      // Explicitly mark "react-router-dom" and "react-toastify" as external
+      external: ['react-router-dom', 'react-toastify'],
     },
   },
 });
