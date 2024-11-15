@@ -9,8 +9,11 @@ export default defineConfig({
       external: [
         'react-router-dom',
         'react-toastify',
-        'axios', // Ensure axios is explicitly marked external
+        'axios', // Add axios here explicitly
       ],
     },
+  },
+  optimizeDeps: {
+    include: ['axios'], // Include axios here to optimize dependency pre-bundling
   },
 })
