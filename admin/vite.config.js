@@ -1,28 +1,32 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: { 
-    port: 5174 
+    port: 5174,
   },
   build: {
     rollupOptions: {
+      external: ['react', 'react-dom', 'react-router-dom', 'react-toastify'], // Externalize libraries
       output: {
-        // Ensures better chunking for production builds
-        manualChunks: undefined,
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            // Group other dependencies into a vendor chunk
+            return 'vendor';
+          }
+        },
       },
     },
     commonjsOptions: {
-      // Ensures compatibility with some CommonJS modules
-      include: /node_modules/,
+      include: /node_modules/, // Ensure compatibility with CommonJS modules
     },
   },
   resolve: {
     alias: {
-      // Example aliases to ensure proper resolution of dependencies
-      '@': '/src',
+      '@': path.resolve(__dirname, 'src'), // Alias for src directory
     },
   },
 });

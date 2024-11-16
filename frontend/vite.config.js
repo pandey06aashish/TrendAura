@@ -10,11 +10,13 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: ['react', 'react-dom', 'react-router-dom'], // Externalize libraries
+      external: ['react', 'react-dom', 'react-router-dom', 'react-toastify'], // Externalize libraries
       output: {
-        manualChunks: {
-          // Better chunking for third-party libraries
-          vendor: ['react', 'react-dom', 'react-router-dom'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            // Group other dependencies into a vendor chunk
+            return 'vendor';
+          }
         },
       },
     },
